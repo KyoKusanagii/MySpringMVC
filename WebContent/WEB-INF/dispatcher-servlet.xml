@@ -1,0 +1,44 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+ 
+ <context:component-scan base-package="com.max.springmvc.controller" />
+ 
+ 
+ 	<!--數字越大優先度越低的視圖解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    	<property name="prefix" value="/WEB-INF/views/" />
+    	<property name="suffix" value=".jsp"/>
+    </bean>
+   <mvc:resources mapping="/resources/**" location="/resources/"/>  
+   <!-- Spring3.1開始支援-方法級別驗證 (JSR-349 Bean Validation 1.1) -->
+	<bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"/>
+	
+	<!--使用視圖的名字來解析視圖-->
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<!--透過order來定義視圖解析器的優先度，數字越大優先度越低-->
+		<property name="order" value="100" />
+	</bean>
+	
+	<!--i18n配置 -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="i18n"/>
+	</bean>
+	
+<!-- 	配置forward頁面 
+		可直接找到配置的頁面
+		，無須經過handler
+-->
+	<mvc:view-controller path="/success" view-name="success"/>
+	<!--實際開發時使用，如果沒加，使用mvc:view-controller，會造成404 -->
+    <mvc:annotation-driven/>
+
+
+</beans>
